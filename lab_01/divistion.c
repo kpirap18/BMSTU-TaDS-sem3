@@ -174,7 +174,7 @@ int division_algorithm(number_r *const int_num, number_r *const float_num,
     for (id = MAX_LEN_MANTISSA - 2; id >= 0; id--)
     {
         result_num->mantissa[id] += con;
-        if (result_num->mantissa[id] == ':')
+        if (result_num->mantissa[id] == '.')
         {
             result_num->mantissa[id] = '0';
             con = 1;
