@@ -1,0 +1,41 @@
+40
+Monastyri Harbort 45 78 211 4 458745 1 1
+Novopokrovsk Maple 784 521 125 9 41254 0 1965 4 7 1
+Kaedi Mockingbird 741 254 12 6 452147 0 1977 2 6 0
+Naebugis Sullivan 412 745 84 2 125466 1 1
+Shihuiyao Donald 742 124 41 3 123454 0 1954 4 1 0
+Las_Palmas Huxley 412 123 12 1 123454 1 1
+Ono-hara Drewry 741 412 452 8 457845 1 0
+A_Palma Hintze 412 454 144 5 452178 1 0
+Novopokrovsk Maple 741 526 212 4 784454 1 0
+Guzhu Holmberg 748 124 412 1 45454 1 0
+Delgado Loftsgordon 741 45 541 2 45454 1 1
+San_Vicente Marcy 124 45 457 4 12457 0 1988 4 7 0
+Las_Palmas Huxley 123 456 423 7 123456 0 1999 1 4 0
+Monastyri Harbort 555 411 12 5 123154 0 1965 5 9 1
+Moscow Basmannaya 265 994 255 8 875894 0 1959 8 8 0
+Delgado Loftsgordon 715 94 215 6 254778 1 1
+Tyazhinskiy Dayton 119 688 720 9 98668 0 1974 6 4 1
+Monastyri Harbort 108 285 182 6 85254 0 1988 11 3 0
+Naebugis Sullivan 101 685 967 12 733670 0 1985 15 3 1
+Wangliao Sundown 266 620 141 14 96452 1 1
+Chepo Rigney 618 414 22 8 74125 1 0
+Rroke Raven 990 109 80 5 54776 1 0
+Mao Garrison 959 512 270 3 588149 0 1999 4 5 1
+Delgado Loftsgordon 75 94 25 6 254778 1 1
+Kumbo Canary 817 744 300 2 132637 1 1
+Huangrangping Linden 745 1 57 4 124578 1 1
+Krokeaí Raven 990 109 44 12 145252 1 0
+Mao Garrison 959 512 270 3 193149 1 1
+Chepo Rigney 741 458 2 4 45457 1 1
+Kumbo Canary 817 744 300 2 132637 1 1
+Huangrangping Linden 74 45 12 4 52589 0 1997 14 2 0
+Kroke Raven 990 109 80 5 500076 1 0
+Mao Garrison 959 512 270 3 193149 0 1966 4 5 0
+Delgado Loftsgordon 75 94 25 6 74668 0 1978 6 9 1
+Delgado Loftsgordon 89 84 222 1 478569 1 0
+Pashmul Mockin 96 588 774 6 458962 1 1
+Cimanggu Sunbrook 6 54 12 3 45896 1 0
+Comalapa Ridgeway 2 6 74 8 45147 0 1978 4 8 0
+Gomunice Ridge 143 332 203 7 869294 0 1997 11 1 0
+San_Vicente Marcy 124 457 457 4 12457 0 1988 4 7 0
