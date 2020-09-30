@@ -477,7 +477,22 @@ func_var add_flat_end(table_r *const table)
     return OK;
 }
 
+void print_pos_table(const table_r table, func_var k)
+{
+    printf("%30s %8s %7s %10s %15s\n", "Address", "Square", "Rooms",
+           "Price", "Primacy");
+    printf("%74s %4s\n", "Yes", "Decor");
+    printf("%74s %4s %10s %10s %7s\n", "No", "time", "Owner", "Tenants", "Animal");
 
+    printf("%30s %8hd %7hd %10d %15s", table.appar[k].address,
+           table.appar[k].arrr, table.appar[k].room,
+           table.appar[k].square, (table.appar[k].is_prim_sec) ? "Yes" : "No");
+
+    printf(" %4hd %10hd %10hd %7s\n", table.appar[k].flat.second.build_time,
+           table.appar[k].flat.second.previous_own_count,
+           table.appar[k].flat.second.last_tenants_count,
+           (table.appar[k].flat.second.animals) ? "Yes" : "No");
+}
 void print_table(const table_r table, boolean keys)
 {
     printf("\n");
@@ -610,22 +625,118 @@ void swap(boolean table, void *v1, void *v2)
         *(key_r*)v2 = buf;
     }
 }
-void bubble_sort(const func_var size, void *aa, func_var (*compare)(const void *v1, const void *v2),
-                 boolean table, size_t byte_size)
+void bubble_sort(table_r *const table, boolean tabl)
 {
-    char *a = (char*)aa;
-    for (func_var i = 0; i < (func_var)(size * byte_size - byte_size); i += byte_size)
+    if (tabl)
     {
-        for (func_var j = 0; j < (func_var)(size * byte_size - i - byte_size); j += byte_size)
+        for (func_var i = 0; i < table->size; i++)
         {
-            if (compare((a + j), (a + j + byte_size)))
+            for (func_var j = 0; j < table->size - 1; j++)
             {
-                swap(table, a + j, a + j + byte_size);
+                if (table->appar[j].room > table->appar[j + 1].room)
+                {
+                    appartment_r buf = table->appar[j];
+                    table->appar[j] = table->appar[j + 1];
+                    table->appar[j + 1] = buf;
+                }
+            }
+        }
+    }
+    else
+    {
+        for (func_var i = 0; i < table->size; i++)
+        {
+            for (func_var j = 0; j < table->size - 1; j++)
+            {
+                if (table->key[j].room > table->key[j + 1].room)
+                {
+                    key_r buf = table->key[j];
+                    table->key[j] = table->key[j + 1];
+                    table->key[j + 1] = buf;
+                }
             }
         }
     }
 }
+func_var input_ch_sort()
+{
+    func_var k;
+    printf("Bubble of qsort\n");
+    int rc = scanf("%hd", &k);
+    if (rc)
+    {
+        return k;
+    }
+    else
+    {
+        return rc;
+    }
+}
 
+func_var read_min_max(int *min, int *max)
+{
+    printf("Введите мин");
+    if (scanf("%d", min) != 1)
+    {
+        return ERROR_INPUT;
+    }
+    printf("Введите max");
+    if (scanf("%d", max) != 1)
+    {
+        return ERROR_INPUT;
+    }
+
+    if (*min < MIN_PRICE || *max > MAX_PRICE)
+    {
+        return ERROR_INPUT;
+    }
+
+    if (*min >= *max)
+    {
+        printf("Нижняя боьше верхей");
+        return ERROR_INPUT;
+    }
+
+    return OK;
+}
+
+func_var find_this_app(table_r *const table, int min, int max)
+{
+    func_var count = 0;
+
+    for (func_var i = 0; i < table->size; i++)
+    {
+        if (table->appar[i].is_prim_sec && table->appar[i].room == 2)
+        {
+            if (table->appar[i].square > min && table->appar[i].square < max)
+            {
+                if (table->appar[i].flat.second.animals == 0)
+                {
+                    print_pos_table(*table, i);
+                    count++;
+                }
+            }
+        }
+    }
+
+    return OK;
+}
+func_var find_app_be_con(table_r *const table)
+{
+    int min, max;
+    if (read_min_max(&min, &max))
+    {
+        printf("Неверные данные");
+        return ERROR_INPUT;
+    }
+
+    if (find_this_app(table, min, max))
+    {
+        printf("Таких квартир нет");
+    }
+
+    return OK;
+}
 func_var do_action(func_var code_act, table_r *table)
 {
     func_var rc;
@@ -637,7 +748,10 @@ func_var do_action(func_var code_act, table_r *table)
         case 1:
             rc = parsing_from_file(table);
             if (rc)
+            {
                 return rc;
+                break;
+            }
             printf("Data is loaded into the table");
             printf("1");
             break;
@@ -653,37 +767,54 @@ func_var do_action(func_var code_act, table_r *table)
             break;
 
         case 4:
-            if (size_check(table->size))
+            if (size_check(table->size - 1))
+            {
                 return EMPTY_TABLE;
-
-            if (input_ch_sort() == 1)
-            {
-
-                qsort(table->key, table->size, sizeof(table->key[0]), compare_key);
-                print_keys(*table);
-                printf("4 SORTED\n");
+                break;
             }
-            else if (input_ch_sort() == 2)
+            else
             {
-                bubble_sort(table->size, table->key, compare_key, false, sizeof(table->key[0]));
+                if (input_ch_sort() == 1)
+                {
 
+                    qsort(table->key, table->size, sizeof(table->key[0]), compare_key);
+                    print_keys(*table);
+                    printf("4 SORTED\n");
+                }
+                else
+                {
+                    bubble_sort(table, false);
+                    print_keys(*table);
+                }
             }
             break;
 
         case 5:
-            if (size_check(table->size))
+            if (size_check(table->size - 1))
+            {
                 return EMPTY_TABLE;
-            qsort(table->appar, table->size, sizeof(table->appar[0]), compare_table);
-            print_table(*table, false);
-            printf("5");
+                break;
+            }
+            else
+            {
+                qsort(table->appar, table->size, sizeof(table->appar[0]), compare_table);
+                print_table(*table, false);
+                printf("5");
+            }
             break;
 
         case 6:
-            if (size_check(table->size))
+            if (size_check(table->size - 1))
+            {
                 return EMPTY_TABLE;
-            qsort(table->key, table->size, sizeof(table->key[0]), compare_key);
-            print_table(*table, true);
-            printf("6");
+                break;
+            }
+            else
+            {
+                qsort(table->key, table->size, sizeof(table->key[0]), compare_key);
+                print_table(*table, true);
+                printf("6");
+            }
             break;
 
         case 7:
@@ -691,8 +822,16 @@ func_var do_action(func_var code_act, table_r *table)
             break;
 
         case 8:
-
-            printf("8");
+            if (size_check(table->size - 1))
+            {
+                return EMPTY_TABLE;
+                break;
+            }
+            else
+            {
+                code_act = find_app_be_con(table);
+                printf("8");
+            }
             break;
 
         case 9:
