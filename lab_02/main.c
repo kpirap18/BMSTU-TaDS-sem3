@@ -1,23 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdint.h>
 
 #define COLOR_RED "\x1b[31m"
 #define COLOR_GREEN "\x1b[32m"
 #define COLOR_YELLOW "\x1b[33m"
+#define COLOR_BLUE "\x1b[34m"
 #define COLOR_RESET "\x1b[0m"
 
 
 #define OK 0
 #define ERROR 1
 
-
+#define MAX_LEN_STRING 100
 #define INV_NUMBER_CHOICE 2
 #define DONT_INT_NUM_CHOICE 3
 #define ERROR_INPUT 7
 #define ERROR_FIND 8
 #define FILE_ERROR 4
+#define ERROR_MAX_ARRAY 9
 #define NAME_FILE "C:/msys64/home/Ira/tads/lab_02/flat.txt"
 #define ERROR_READ_FILE 5
 #define SIZE_FILE 100
@@ -37,6 +39,8 @@
 #define MAX_PRICE 1000000
 #define MIN_PRICE 1
 #define EMPTY_TABLE 6
+#define MAX_ARRAY 100
+#define GNZ 1990000000
 
 typedef short int func_var;
 
@@ -122,7 +126,7 @@ void print_hello()
 }
 void printf_input()
 {
-    printf(COLOR_YELLOW"%s"COLOR_RESET"%s","\n\nFor help input 10", "\nINPUT YOUR CHOICE: ");
+    printf(COLOR_BLUE"%s"COLOR_RESET"%s","\n\nFor help input 10", "\nINPUT YOUR CHOICE: ");
 }
 void clean_()
 {
@@ -136,7 +140,6 @@ func_var size_check(func_var size)
 {
     if (!size)
     {
-        fprintf(stderr, "Пустая");
         return EMPTY_TABLE;
     }
 
@@ -145,11 +148,14 @@ func_var size_check(func_var size)
 
 func_var check_number(func_var *const number, const func_var l, const func_var r)
 {
-    if (scanf("%hd", number) != 1)
-    {
-        clean_();
+    char num[3];
+    char *n;
+    fflush(stdin);
+    n = fgets(num, 4, stdin);
+    if (n == NULL || num[0] == '\n')
         return DONT_INT_NUM_CHOICE;
-    }
+    num[strlen(num) - 1] = '\0';
+    *number = (func_var)atoi(num);
 
     if (*number < l || *number > r)
     {
@@ -167,9 +173,11 @@ void clean_tab(table_r *const table)
         table->key[i].id = 0;
         table->appar[i].address[0] = '\0';
     }
+    table->size = 0;
 }
 func_var file_size(table_r *table, FILE *f)
 {
+    fflush(stdin);
     if (fscanf(f, "%hd", &table->size) != 1)
         return ERROR_READ_FILE;
 
@@ -178,7 +186,7 @@ func_var file_size(table_r *table, FILE *f)
 
     return OK;
 }
-void  gluing_address(table_r *table, char *city, char *street,
+void gluing_address(table_r *table, char *city, char *street,
                      func_var num_home, func_var app, func_var i)
 {
     char num_home_str[4], app_str[4];
@@ -202,29 +210,71 @@ func_var read_address(table_r *table, FILE *f, func_var i)
     int num_home, app;
 
     if (!f->_file)
+    {
         printf("Specify the city where the apartment is located \n"
-               "(only in Latin, without spaces (1 to 50)): ");
-    if (fscanf(f, "%50s", city) != 1)
-    {
-        fprintf(stderr, "Invalid ciy entered.\n");
-        return ERROR_READ_FILE;
+                   "(only in Latin, without spaces (1 to 50)): ");
+        fflush(stdin);
+        char *rc = fgets(city, 52, f);
+        if (rc == NULL || city[0] == '\n')
+        {
+            fprintf(stderr, "Invalid ciy entered1.\n");
+            return ERROR_READ_FILE;
+        }
+        else
+        {
+            if (city[strlen(city) - 1] != '\n')
+            {
+                if (fscanf(f, "%s", ch))
+                {
+                    fprintf(stderr, "Invalid ciy entered2.\n");
+                    return ERROR_READ_FILE;
+                }
+            }
+            else
+                city[strlen(city) - 1] = '\0';
+        }
     }
-
-    if (!f->_file && fscanf(f, "%s", ch) == 1)
+    else
     {
-        fprintf(stderr, "Invalid ciy entered.\n");
-        return ERROR_READ_FILE;
+        if (fscanf(f, "%50s", city) != 1)
+        {
+            fprintf(stderr, "Invalid ciy entered.\n");
+            return ERROR_READ_FILE;
+        }
     }
-
     if (!f->_file)
-        printf("Specify the street where the apartment is located \n"
-               "(only in Latin, without spaces (1 to 50)): ");
-    if (fscanf(f, "%50s", street) != 1)
     {
-        fprintf(stderr, "Invalid street entered.\n");
-        return ERROR_READ_FILE;
+        printf("Specify the street where the apartment is located \n"
+                   "(only in Latin, without spaces (1 to 50)): ");
+        fflush(stdin);
+        char *rc = fgets(street, 52, f);
+        if (rc == NULL || street[0] == '\n')
+        {
+            fprintf(stderr, "Invalid street entered1.\n");
+            return ERROR_READ_FILE;
+        }
+        else
+        {
+            if (street[strlen(street) - 1] != '\n')
+            {
+                if (fscanf(f, "%s", ch))
+                {
+                    fprintf(stderr, "Invalid street entered2.\n");
+                    return ERROR_READ_FILE;
+                }
+            }
+            else
+                street[strlen(city) - 1] = '\0';
+        }
     }
-
+    else
+    {
+        if (fscanf(f, "%50s", street) != 1)
+        {
+            fprintf(stderr, "Invalid street entered.\n");
+            return ERROR_READ_FILE;
+        }
+    }
     if (!f->_file)
         printf("Enter the house number (from 1 to 999): ");
     if (fscanf(f, "%d", &num_home) != 1)
@@ -322,8 +372,8 @@ func_var read_primary(table_r *table, FILE *f, func_var i)
     func_var decor;
 
     if (!f->_file)
-        printf("Specify whether the apartment has finishing\n"
-               "Enter 1 if Yes and 0 if no.");
+        printf("Specify whether the apartment has primary\n"
+               "Enter 1 if Yes and 0 if no: ");
     if (fscanf(f, "%hd", &decor) != 1)
     {
         fprintf(stderr, "Invalid attribute entered.");
@@ -442,10 +492,16 @@ func_var parsing_from_file(table_r *table)
     f = fopen(NAME_FILE, "r");
 
     if (f == NULL)
+    {
+        printf("Some file error!!!");
         return FILE_ERROR;
+    }
 
     if (file_size(table, f) != OK)
+    {
+        printf("File empry, please check your file!!!");
         return FILE_ERROR;
+    }
 
     func_var rc = load_in_file(table, f, 0, table->size);
 
@@ -470,6 +526,9 @@ func_var add_flat_end(table_r *const table)
     if (rc)
         return rc;
 
+    table->key[table->size].room = table->appar[table->size].room;
+    table->key[table->size].id = table->size;
+
     ++(table->size);
 
     printf("Flat add to end table");
@@ -479,43 +538,66 @@ func_var add_flat_end(table_r *const table)
 
 void print_pos_table(const table_r table, func_var k)
 {
-    printf("%30s %8s %7s %10s %15s\n", "Address", "Square", "Rooms",
+    printf("%30s %8s %7s %7s %10s\n", "Address", "Square", "Rooms",
            "Price", "Primacy");
-    printf("%74s %4s\n", "Yes", "Decor");
-    printf("%74s %4s %10s %10s %7s\n", "No", "time", "Owner", "Tenants", "Animal");
+    printf("%66s %4s\n", "Yes", "Decor");
+    printf("%66s %9s %5s %7s %6s\n", "No", "time", "Owner", "Tenants", "Animal");
 
-    printf("%30s %8hd %7hd %10d %15s", table.appar[k].address,
+    printf("%30s %8hd %7hd %10d %7s", table.appar[k].address,
            table.appar[k].arrr, table.appar[k].room,
            table.appar[k].square, (table.appar[k].is_prim_sec) ? "Yes" : "No");
 
-    printf(" %4hd %10hd %10hd %7s\n", table.appar[k].flat.second.build_time,
-           table.appar[k].flat.second.previous_own_count,
-           table.appar[k].flat.second.last_tenants_count,
-           (table.appar[k].flat.second.animals) ? "Yes" : "No");
+    if (table.appar[k].is_prim_sec)
+        printf(" %4s\n", (table.appar[k].flat.primary.decoration) ? "Yes" : "No");
+    else
+        printf(" %9hd %5hd %7hd %6s\n", table.appar[k].flat.second.build_time,
+               table.appar[k].flat.second.previous_own_count,
+               table.appar[k].flat.second.last_tenants_count,
+               (table.appar[k].flat.second.animals) ? "Yes" : "No");
 }
 void print_table(const table_r table, boolean keys)
 {
     printf("\n");
-
-    printf("%30s %8s %7s %10s %15s\n", "Address", "Square", "Rooms",
+;
+    func_var k;
+    printf("%30s %8s %7s %7s %10s\n", "Address", "Square", "Rooms",
            "Price", "Primacy");
-    printf("%74s %4s\n", "Yes", "Decor");
-    printf("%74s %4s %10s %10s %7s\n", "No", "time", "Owner", "Tenants", "Animal");
+    printf("%66s %4s\n", "Yes", "Decor");
+    printf("%66s %9s %5s %7s %6s\n", "No", "time", "Owner", "Tenants", "Animal");
     for (func_var i = 0; i < table.size; i++)
     {
-        func_var k = (keys) ? table.key[i].id : i;
+        if (keys == false)
+        {
+            k = i;
 
-        printf("%30s %8hd %7hd %10d %15s", table.appar[k].address,
-               table.appar[k].arrr, table.appar[k].room,
-               table.appar[k].square, (table.appar[k].is_prim_sec) ? "Yes" : "No");
+            printf("%30s %8hd %7hd %10d %7s", table.appar[k].address,
+                   table.appar[k].arrr, table.appar[k].room,
+                   table.appar[k].square, (table.appar[k].is_prim_sec) ? "Yes" : "No");
 
-        if (table.appar[k].is_prim_sec)
-            printf(" %4s\n", (table.appar[k].flat.primary.decoration) ? "Yes" : "No");
+            if (table.appar[k].is_prim_sec)
+                printf(" %4s\n", (table.appar[k].flat.primary.decoration) ? "Yes" : "No");
+            else
+                printf(" %9hd %5hd %7hd %6s\n", table.appar[k].flat.second.build_time,
+                       table.appar[k].flat.second.previous_own_count,
+                       table.appar[k].flat.second.last_tenants_count,
+                       (table.appar[k].flat.second.animals) ? "Yes" : "No");
+        }
         else
-            printf(" %4hd %10hd %10hd %7s\n", table.appar[k].flat.second.build_time,
-                   table.appar[k].flat.second.previous_own_count,
-                   table.appar[k].flat.second.last_tenants_count,
-                   (table.appar[k].flat.second.animals) ? "Yes" : "No");
+        {
+            k = table.key[i].id;
+
+            printf("%30s %8hd %7hd %10d %10s", table.appar[k].address,
+                   table.appar[k].arrr, table.appar[k].room,
+                   table.appar[k].square, (table.appar[k].is_prim_sec) ? "Yes" : "No");
+
+            if (table.appar[k].is_prim_sec)
+                printf(" %4s\n", (table.appar[k].flat.primary.decoration) ? "Yes" : "No");
+            else
+                printf(" %4hd %10hd %10hd %7s\n", table.appar[k].flat.second.build_time,
+                       table.appar[k].flat.second.previous_own_count,
+                       table.appar[k].flat.second.last_tenants_count,
+                       (table.appar[k].flat.second.animals) ? "Yes" : "No");
+        }
 
     }
 }
@@ -572,7 +654,7 @@ func_var find_to_del_room(table_r *const table, func_var room)
         }
     }
 
-    return (i) ? OK : ERROR_FIND;
+    return (i) ? i : ERROR_FIND;
 }
 func_var delet_record_room(table_r *const table)
 {
@@ -590,13 +672,14 @@ func_var delet_record_room(table_r *const table)
         return ERROR_INPUT;
     }
 
-    if (find_to_del_room(table, room))
+    func_var rc = find_to_del_room(table, room);
+    if (rc == ERROR_FIND)
     {
         fprintf(stderr, "There are no apartments with this number.\n");
         return ERROR_FIND;
     }
 
-    printf("All apartments with the entered number have been deleted.\n");
+    printf("All (%d) apartments with the entered number have been deleted.\n", rc);
 
     return OK;
 }
@@ -661,26 +744,32 @@ void bubble_sort(table_r *const table, boolean tabl)
 func_var input_ch_sort()
 {
     func_var k;
-    printf("Bubble of qsort\n");
+    printf("Choose which sorting, bubble or qsort\n"
+           "1 - qsort\n"
+           "2 - bubble\n"
+           "Your choice: ");
     int rc = scanf("%hd", &k);
     if (rc)
     {
+        if (k == 1 || k == 2)
         return k;
     }
     else
     {
         return rc;
     }
+
+    return OK;
 }
 
 func_var read_min_max(int *min, int *max)
 {
-    printf("Введите мин");
+    printf("Enter the lower limit of the price to search for: ");
     if (scanf("%d", min) != 1)
     {
         return ERROR_INPUT;
     }
-    printf("Введите max");
+    printf("Enter the upper limit of the price to search for: ");
     if (scanf("%d", max) != 1)
     {
         return ERROR_INPUT;
@@ -693,7 +782,7 @@ func_var read_min_max(int *min, int *max)
 
     if (*min >= *max)
     {
-        printf("Нижняя боьше верхей");
+        printf("The lower border is larger than the upper one.\n");
         return ERROR_INPUT;
     }
 
@@ -719,21 +808,95 @@ func_var find_this_app(table_r *const table, int min, int max)
         }
     }
 
-    return OK;
+    return count;
 }
 func_var find_app_be_con(table_r *const table)
 {
     int min, max;
     if (read_min_max(&min, &max))
     {
-        printf("Неверные данные");
+        printf("\nInvalid minimum or maximum borders are entered.\n");
         return ERROR_INPUT;
     }
 
-    if (find_this_app(table, min, max))
+    if (find_this_app(table, min, max) == 0)
     {
-        printf("Таких квартир нет");
+        printf("\nNo apartments found for your search.\n");
     }
+
+    return OK;
+}
+void print_res(table_r *const table, int64_t tact, int64_t tact_qsort,
+               func_var type_sort, func_var type_table)
+{
+    double prob_t, prob_tac;
+
+    if (!type_table)
+    {
+        prob_t = 100 * ((double)tact / GNZ) / ((double)tact_qsort / GNZ);
+        prob_tac = 100 * (double)(tact) / tact_qsort;
+        printf("%8s %11lld %14lld (%.2lf%%) %18.10lf (%.2lf%%)\n",
+               (type_sort) ? "bubble" : "qsort",
+               sizeof(table->key[0]) * table->size, tact, prob_tac,
+                (double)tact / GNZ, prob_t);
+    }
+    else
+    {
+        prob_t = 100 * ((double)tact / GNZ) / ((double)tact_qsort / GNZ);
+        prob_tac = 100 * (double)(tact) / tact_qsort;
+        printf("%8s %11lld %14lld (%.2lf%%) %18.10lf (%.2lf%%)\n",
+               (type_sort) ? "bubble" : "qsort",
+               sizeof(table->appar[0]) * table->size, tact, prob_tac,
+                (double)tact / GNZ, prob_t);
+    }
+}
+int64_t tact(void)
+{
+    int32_t h, l;
+    __asm__ __volatile__ (
+        "rdtsc\n"
+        "movl %%edx, %0\n"
+        "movl %%eax, %1\n"
+        : "=r" (h), "=r" (l)
+        :: "%rax", "%rbx", "%rcx", "%rdx"
+        );
+
+    int64_t tacks = ((int64_t)h << 32) | l;
+
+    return tacks;
+}
+func_var sort_qsort_vs_bub(table_r *const table)
+{
+    int64_t s, e, s1, e1, s2, e2, s3, e3;
+
+    printf(COLOR_GREEN"           %s\n"COLOR_RESET, "TABLE");
+    printf("%8s %17s %15s %20s\n", "What", "Memory (bytes)", "Tacts", "Time");
+    parsing_from_file(table);
+    s = tact();
+    qsort(table->appar, table->size, sizeof(table->appar[0]), compare_table);
+    e = tact();
+    print_res(table, e - s, e - s, 0, 1);
+
+    parsing_from_file(table);
+    s1 = tact();
+    bubble_sort(table, true);
+    e1 = tact();
+    print_res(table, e1 - s1, e - s, 1, 1);
+
+    printf("\n\n");
+    printf(COLOR_GREEN"           %s\n"COLOR_RESET, "KEYS");
+    printf("%8s %17s %15s %20s\n", "What", "Memory (bytes)", "Tacts", "Time");
+    parsing_from_file(table);
+    s2 = tact();
+    qsort(table->key, table->size, sizeof(table->key[0]), compare_key);
+    e2 = tact();
+    print_res(table, e2 - s2, e2 - s2, 0, 0);
+
+    parsing_from_file(table);
+    s3 = tact();
+    bubble_sort(table, false);
+    e3 = tact();
+    print_res(table, e3 - s3, e2 - s2, 1, 0);
 
     return OK;
 }
@@ -746,10 +909,11 @@ func_var do_action(func_var code_act, table_r *table)
     switch (code_act)
     {
         case 1:
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Entering data from a file (40 record)\n");
             rc = parsing_from_file(table);
             if (rc)
             {
-                return rc;
+                //return rc;
                 break;
             }
             printf("Data is loaded into the table");
@@ -757,56 +921,103 @@ func_var do_action(func_var code_act, table_r *table)
             break;
 
         case 2:
-            code_act = add_flat_end(table);
-            printf("2");
-            break;
-
-        case 3:
-            code_act = delet_record_room(table);
-            printf("3");
-            break;
-
-        case 4:
-            if (size_check(table->size - 1))
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Adding an entry to the end of the file\n");
+            if (table->size + 1 > MAX_ARRAY)
             {
-                return EMPTY_TABLE;
+                printf("The table is completely filled in.\n");
+                //return ERROR_MAX_ARRAY;
                 break;
             }
             else
             {
-                if (input_ch_sort() == 1)
+                code_act = add_flat_end(table);
+                printf("2");
+            }
+            break;
+
+        case 3:
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Deleting an entry from a file by the specified field\n");
+            if (size_check(table->size))
+            {
+                fprintf(stderr, "The table is empty.\n");
+                //return EMPTY_TABLE;
+                break;
+            }
+            else
+            {
+                code_act = delet_record_room(table);
+                printf("3");
+            }
+            break;
+
+        case 4:
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Sorting keys\n");
+            if (size_check(table->size))
+            {
+                fprintf(stderr, "The table is empty.\n");
+                //return EMPTY_TABLE;
+                break;
+            }
+            else
+            {
+                func_var p = input_ch_sort();
+                if (p == 1)
                 {
 
                     qsort(table->key, table->size, sizeof(table->key[0]), compare_key);
                     print_keys(*table);
                     printf("4 SORTED\n");
                 }
-                else
+                else if (p == 2)
                 {
                     bubble_sort(table, false);
                     print_keys(*table);
+                }
+                else
+                {
+                    printf("Error choice sort.\n");
+                    break;
                 }
             }
             break;
 
         case 5:
-            if (size_check(table->size - 1))
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Sorting table\n");
+            if (size_check(table->size))
             {
-                return EMPTY_TABLE;
+                fprintf(stderr, "The table is empty.\n");
+                //return EMPTY_TABLE;
                 break;
             }
             else
             {
-                qsort(table->appar, table->size, sizeof(table->appar[0]), compare_table);
-                print_table(*table, false);
-                printf("5");
+                func_var p = input_ch_sort();
+                if (p == 1)
+                {
+
+                    qsort(table->appar, table->size, sizeof(table->appar[0]), compare_table);
+                    print_table(*table, false);
+                    printf("4 SORTED\n");
+                }
+                else if (p == 2)
+                {
+                    bubble_sort(table, true);
+                    print_table(*table, false);
+                }
+                else
+                {
+                    printf("Error choice sort.\n");
+                    break;
+                }
             }
             break;
 
         case 6:
-            if (size_check(table->size - 1))
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Output a table by sorted keys\n");
+            if (size_check(table->size))
             {
-                return EMPTY_TABLE;
+                fprintf(stderr, "The table is empty.\n");
+                //return EMPTY_TABLE;
                 break;
             }
             else
@@ -818,13 +1029,27 @@ func_var do_action(func_var code_act, table_r *table)
             break;
 
         case 7:
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Comparison of sorts\n");
+            if (size_check(table->size))
+            {
+                fprintf(stderr, "The table is empty.\n");
+                //return EMPTY_TABLE;
+                break;
+            }
+            else
+            {
+                sort_qsort_vs_bub(table);
+                printf("qsort_bubble");
+            }
             printf("7");
             break;
 
         case 8:
-            if (size_check(table->size - 1))
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Search for records by the specified fields\n");
+            if (size_check(table->size))
             {
-                return EMPTY_TABLE;
+                fprintf(stderr, "The table is empty.\n");
+                //return EMPTY_TABLE;
                 break;
             }
             else
@@ -835,10 +1060,19 @@ func_var do_action(func_var code_act, table_r *table)
             break;
 
         case 9:
+            printf(COLOR_YELLOW"%s"COLOR_RESET, "Output the table\n");
             if (size_check(table->size))
-                return EMPTY_TABLE;
-            print_table(*table, false);
-            printf("9");
+            {
+                fprintf(stderr, "The table is empty.\n");
+                //return EMPTY_TABLE;
+                break;
+            }
+            else
+            {
+
+                print_table(*table, false);
+                printf("9");
+            }
             break;
         case 10:
             print_hello();
@@ -853,6 +1087,9 @@ int main()
     print_hello();
     func_var num_command = -1;
 
+    table_r table;
+
+    clean_tab(&table);
     while (num_command != 0)
     {
         printf_input();
@@ -864,7 +1101,7 @@ int main()
         }
         else
         {
-            table_r table;
+
             func_var code_err = do_action(num_command, &table);
 
             printf("%d", code_err);
