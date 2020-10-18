@@ -27,12 +27,19 @@
 #define MATRIX_SIZE_ERR       -7
 
 #define COUNT_SIZE             5
-#define MAX_MATRIX_SIZE      200
-#define MAX_MATRIX_ELEMS   40000
+#define MAX_MATRIX_SIZE      150
+#define MAX_MATRIX_ELEMS   22500
 
 #define GNZ 1990000000
 
 typedef int func_var;
+typedef struct
+{
+    func_var rows;
+    func_var columns;
+    func_var data[MAX_MATRIX_SIZE][1];
+} vector_std_r;
+
 typedef struct
 {
     func_var rows;
@@ -56,7 +63,5 @@ typedef struct
     func_var row[MAX_MATRIX_ELEMS]; // JA
     list_elem pointer[MAX_MATRIX_SIZE + 1]; // IA
 } matrix_r;
-
-
 
 #endif // DEFSTRERR_H

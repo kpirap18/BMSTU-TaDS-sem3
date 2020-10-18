@@ -1,6 +1,6 @@
 #include "multi.h"
 
-func_var multi_std(matrix_std_r *matrix, matrix_std_r *vector, matrix_std_r *res)
+func_var multi_std(matrix_std_r *matrix, vector_std_r *vector, vector_std_r *res)
 {
     if (matrix->columns != vector->rows || matrix->rows != res->rows)
     {
@@ -10,7 +10,7 @@ func_var multi_std(matrix_std_r *matrix, matrix_std_r *vector, matrix_std_r *res
 
     for (func_var i = 0; i < matrix->rows; i++)
         for (func_var j = 0; j < matrix->columns; j++)
-            res->data[i][j] += matrix->data[j][i] * vector->data[i][0];
+            res->data[j][0] += matrix->data[j][i] * vector->data[i][0];
     return OK;
 }
 func_var multi_rr(matrix_r *matrix, matrix_r *vector, matrix_r *res)
@@ -18,7 +18,7 @@ func_var multi_rr(matrix_r *matrix, matrix_r *vector, matrix_r *res)
     func_var ip_res[MAX_MATRIX_SIZE];
     func_var ip_vector[MAX_MATRIX_SIZE];
 
-    if (matrix->columns != vector->rows)// || matrix->rows != res->rows)
+    if (matrix->columns != vector->rows || matrix->rows != res->rows)
     {
         printf("Invalid matrix sizes.\n");
         return MULTI_ERR;

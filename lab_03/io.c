@@ -7,18 +7,22 @@ void print_hello()
 {
     printf(COLOR_BLUE"%s" COLOR_RESET "%s",
            "\n\nMENU (select one item, enter a number):\n\n",
-           "1. Filling in a matrix from a file;\n"
-           "2. Filling in the matrix manually;\n"
-           "3. Filling in a vector from a file;\n"
-           "4. Filling in the vector manually;\n"
-           "5. Multi of a classical matrix on a vector;\n"
-           "6. Mulri of a special storage method matrix by a vector;\n"
-           "7. The output of the comparison time works;\n"
-           "8. Output multiplication results in standard format.\n"
-           "9. Output multiplication results in sparse format.\n"
-           "10. Output multiplication results in coordinate format\n"
-           "11. Output the vector in standard format.\n"
-           "12. Print the vector in sparse form.\n\n"
+           " 1 - Filling in a matrix from a file;\n"
+           " 2 - Filling in the matrix manually;\n"
+           " 3 - Filling in a vector from a file;\n"
+           " 4 - Filling in the vector manually;\n"
+           " 5 - Multi of a classical matrix on a vector;\n"
+           " 6 - Mulri of a special storage method matrix by a vector;\n"
+           " 7 - The output of the comparison time works;\n"
+           " 8 - Output multiplication results in standard format.\n"
+           " 9 - Output multiplication results in sparse format.\n"
+           "10 - Output multiplication results in coordinate format\n"
+           "11 - Output the vector in standard format.\n"
+           "12 - Output the vector in sparse form.\n"
+           "13 - Output the vector in coordinate format.\n"
+           "14 - Output the matrix in standard format.\n"
+           "15 - Output the matrix in sparse form.\n"
+           "16 - Output the matrix in coordinate format.\n\n"
            "0. Program exit.\n"
            );
 }
@@ -28,7 +32,7 @@ void print_hello()
  */
 void printf_input()
 {
-    printf(COLOR_BLUE"%s"COLOR_RESET"%s","\n\nFor help input 9", "\nINPUT YOUR CHOICE: ");
+    printf(COLOR_BLUE"%s"COLOR_RESET"%s","\n\nFor help input 17", "\nINPUT YOUR CHOICE: ");
 }
 
 /*!
@@ -60,29 +64,21 @@ func_var check_number(func_var *const number, const func_var l, const func_var r
 
     return OK;
 }
-void print_matrix(const matrix_std_r *const matrix, FILE *const f)
+
+func_var print_coord(const matrix_std_r *matrix, const vector_std_r *vector,
+                 const vector_std_r *res)
 {
-    for (int i = 0; i < matrix->rows; i++)
-    {
-        for (int j = 0; j < matrix->columns; j++)
-            fprintf(f, "%10d", matrix->data[i][j]);
-        fprintf(f, "\n\n");
-    }
-}
-func_var print_coord(const matrix_std_r *matrix, const matrix_std_r *vector,
-                 const matrix_std_r *res)
-{
-    if (matrix->rows == -1)
+    if (matrix->rows == 0)
     {
         printf("Matrix is empty.\n");
         return 1;
     }
-    if (vector->rows == -1)
+    if (vector->rows == 0)
     {
         printf("Vector is empty.\n");
         return 1;
     }
-    if (res->rows == -1)
+    if (res->rows == 0)
     {
         printf("Result is empty.\n");
         return 1;
@@ -109,39 +105,41 @@ func_var print_coord(const matrix_std_r *matrix, const matrix_std_r *vector,
         for (int j = 0; j < res->columns; j++)
             if (res->data[i][j] != 0)
             {
-                c++;
                 printf("%3d %3d %5d\n", i, j, res->data[i][j]);
             }
+            else
+                c++;
     if (c + 1 == res->rows)
         printf("Result has all elements are NULL!!!\n\n");
 
     return OK;
 }
-func_var print_std(const matrix_std_r *matrix, const matrix_std_r *vector,
-               const matrix_std_r *res)
+func_var print_std(const matrix_std_r *matrix, const vector_std_r *vector,
+               const vector_std_r *res)
 {
-    if (matrix->rows == -1)
+    if (matrix->rows == 0)
     {
         printf("Matrix is empty.\n");
         return 1;
     }
-    if (vector->rows == -1)
+    if (vector->rows == 0)
     {
         printf("Vector is empty.\n");
         return 1;
     }
-    if (res->rows == -1)
+    if (res->rows == 0)
     {
         printf("Result is empty.\n");
         return 1;
     }
 
-    if (matrix->columns > 10 || matrix->rows > 10)
+    if (matrix->columns > 50 || matrix->rows > 50)
     {
         printf("The matrix is too large. It is not possible to display it in its entirety.\n");
         return 1;
     }
 
+    printf("            MATRIX                       VECTOR   RESULT\n");
     for (int i = 0; i < matrix->rows; i++)
     {
         for (int j = 0; j < matrix->columns; j++)
@@ -162,83 +160,233 @@ func_var print_std(const matrix_std_r *matrix, const matrix_std_r *vector,
     printf("\n\n");
     return 0;
 }
-func_var print_razr(matrix_r *const matrix, matrix_r *const vector, matrix_r *const res)
+func_var print_razr(matrix_r *const matrix, matrix_r *const vector, matrix_r *const res, vector_std_r *true_res)
 {
-    if (matrix->quan > 50)
-    {
-        printf("This output is not good, use Coordinate or Simple.\n");
-        return 1;
-    }
-    if (matrix->quan == -1)
+
+    if (matrix->quan == 0)
     {
         printf("Matrix is empty.\n");
         return 1;
     }
-    if (vector->quan == -1)
+    if (vector->quan == 0)
     {
         printf("Vector is empty.\n");
         return 1;
     }
-    if (res->quan == -1)
+    if (res->quan == 0)
     {
         printf("Result is empty.\n");
         return 1;
     }
 
-    printf("MATRIX\n    ");
-    for (func_var i = 0; i < matrix->quan; i++)
+    printf("MATRIX\n");
+    for (func_var j = 0; j < matrix->quan; j += 30)
     {
-        printf("%3d ", i);
+        printf("    ");
+        for (func_var i = j; i < j + 30; i++)
+        {
+            if (matrix->value[i] != 0)
+                printf("%5d ", i);
+        }
+        printf("\nAN: ");
+        for (func_var i = j; i < j + 30; i++)
+        {
+            if (matrix->value[i] != 0)
+                printf("%5d ", matrix->value[i]);
+        }
+        printf("\nJA: ");
+        for (func_var i = j; i <j + 30; i++)
+        {
+            if (matrix->value[i] != 0)
+                printf("%5d ", matrix->row[i]);
+        }
+        printf("\n");
     }
-    printf("\nAN: ");
-    for (func_var i = 0; i < matrix->quan; i++)
+    printf("\nIA: ");
+    for (func_var i = 0; i < matrix->rows; i++)
+        printf("%5d", matrix->pointer[i].index);
+
+    printf("\n\nVECTOR\n");
+    for (func_var j = 0; j < vector->quan; j += 30)
     {
-        printf("%3d ", matrix->value[i]);
-    }
-    printf("\nJA: ");
-    for (func_var i = 0; i < matrix->quan; i++)
-    {
-        printf("%3d ", matrix->row[i]);
+        printf("    ");
+        for (func_var i = j; i < j + 30; i++)
+        {
+            if (vector->value[i] != 0)
+                printf("%5d ", i);
+        }
+        printf("\nAN: ");
+        for (func_var i = j; i < j + 30; i++)
+        {
+            if (vector->value[i] != 0)
+                printf("%5d ", vector->value[i]);
+        }
+        printf("\nJA: ");
+        for (func_var i = j; i <j + 30; i++)
+        {
+            if (vector->value[i] != 0)
+                printf("%5d ", vector->row[i]);
+        }
+        printf("\n\n");
     }
 
 
-    printf("\n\nVECTOR\n    ");
-    for (func_var i = 0; i < vector->quan; i++)
-    {
-        printf("%3d ", i);
-    }
-    printf("\nAN: ");
-    for (func_var i = 0; i < vector->quan; i++)
-    {
-        printf("%3d ", vector->value[i]);
-    }
-    printf("\nJA: ");
-    for (func_var i = 0; i < vector->quan; i++)
-    {
-        printf("%3d ", vector->row[i]);
-    }
-
-    printf("\n\nRESULT\n    ");
+    printf("\n\nRESULT\n");
     if (res->quan == 0)
         printf("Result has all elements are NULL!!!");
     else
     {
-        for (func_var i = 0; i < res->quan; i++)
+        for (func_var j = 0; j < res->quan; j += 30)
         {
-            printf("%3d ", i);
-        }
-        printf("\nAN: ");
-        for (func_var i = 0; i < res->quan; i++)
-        {
-            printf("%3d ", res->value[i]);
-        }
-        printf("\nJA: ");
-        for (func_var i = 0; i < res->quan; i++)
-        {
-            printf("%3d ", res->row[i]);
+            printf("    ");
+            for (func_var i = j; i < j + 30; i++)
+            {
+                if (res->quan > 0)
+                    printf("%5d ", i);
+            }
+            printf("\nAN: ");
+            for (func_var i = j; i < j + 30; i++)
+            {
+                if (res->quan > 0)
+                    printf("%5d ", true_res->data[res->row[i]][0]);
+            }
+            printf("\nJA: ");
+            for (func_var i = j; i <j + 30; i++)
+            {
+                if (res->quan > 0)
+                    printf("%5d ", res->row[i]);
+            }
+
+            printf("\n\n");
         }
     }
-    printf("\n\n");
 
     return OK;
+}
+void print_matrix_sparse(matrix_r *matrix)
+{
+    if (matrix->quan == 0)
+    {
+        printf("Please, input matrix/vecrot before its output.\n");
+        return;
+    }
+    printf("MATRIX\n");
+    for (func_var j = 0; j < matrix->quan; j += 30)
+    {
+        printf("    ");
+        for (func_var i = j; i < j + 30; i++)
+        {
+            if (matrix->value[i] != 0)
+                printf("%5d ", i);
+        }
+        printf("\nAN: ");
+        for (func_var i = j; i < j + 30; i++)
+        {
+            if (matrix->value[i] != 0)
+                printf("%5d ", matrix->value[i]);
+        }
+        printf("\nJA: ");
+        for (func_var i = j; i <j + 30; i++)
+        {
+            if (matrix->value[i] != 0)
+                printf("%5d ", matrix->row[i]);
+        }
+        printf("\n");
+    }
+    printf("\nIA: ");
+    for (func_var i = 0; i < matrix->rows; i++)
+        printf("%5d", matrix->pointer[i].index);
+}
+void print_matrix_std(const matrix_std_r *const matrix, FILE *const f)
+{
+    if (matrix->rows == 0)
+    {
+        printf("Please, input matrix/vecrot before its output.\n");
+        return;
+    }
+    if (matrix->rows > 30)
+    {
+        printf("This output not good, please choose other.\n");
+        return;
+    }
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        for (int j = 0; j < matrix->columns; j++)
+            fprintf(f, "%8d", matrix->data[i][j]);
+        fprintf(f, "\n");
+    }
+}
+void print_vector_std(const vector_std_r *const matrix, FILE *const f)
+{
+    if (matrix->rows == 0)
+    {
+        printf("Please, input matrix/vecrot before its output.\n");
+        return;
+    }
+    if (matrix->rows > 30)
+    {
+        printf("This output not good, please choose other.\n");
+        return;
+    }
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        for (int j = 0; j < matrix->columns; j++)
+            fprintf(f, "%8d", matrix->data[i][j]);
+        fprintf(f, "\n");
+    }
+}
+void print_coordin_one(matrix_std_r *matrix)
+{
+    if (matrix->rows == 0)
+    {
+        printf("Please, input matrix/vecrot before its output.\n");
+        return;
+    }
+    if (matrix->rows > 30)
+    {
+        printf("This output not good, please choose other.\n");
+        return;
+    }
+    printf("\n\nMATRIX\n");
+    printf(" i   j   value\n\n");
+    for (int i = 0; i < matrix->rows; i++)
+        for (int j = 0; j < matrix->columns; j++)
+            if (matrix->data[i][j] != 0)
+                printf("%3d %3d %5d\n", i, j, matrix->data[i][j]);
+
+}
+
+void print_coordin_one_v(vector_std_r *matrix)
+{
+    if (matrix->rows == 0)
+    {
+        printf("Please, input matrix/vecrot before its output.\n");
+        return;
+    }
+    if (matrix->rows > 30)
+    {
+        printf("This output not good, please choose other.\n");
+        return;
+    }
+    printf("\n\nMATRIX\n");
+    printf(" i   j   value\n\n");
+    for (int i = 0; i < matrix->rows; i++)
+        for (int j = 0; j < matrix->columns; j++)
+            if (matrix->data[i][j] != 0)
+                printf("%3d %3d %5d\n", i, j, matrix->data[i][j]);
+
+}
+
+
+
+
+// for debug
+void print_matrix(const matrix_std_r *const matrix, FILE *const stream)
+{
+    for (int i = 0; i < matrix->rows; i++)
+    {
+        for (int j = 0; j < matrix->columns; j++)
+            fprintf(stream, "%10d", matrix->data[i][j]);
+        fprintf(stream, "\n\n");
+    }
 }

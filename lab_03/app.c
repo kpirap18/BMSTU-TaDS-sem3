@@ -28,7 +28,7 @@ int main ()
     while (num_command != 0)
     {
         printf_input();
-        if (check_number(&num_command, 0, 11) != OK)
+        if (check_number(&num_command, 0, 17) != OK)
         {
             printf(COLOR_RED"%s"COLOR_RESET"%s",
                    "ERROR!!!",
