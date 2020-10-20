@@ -6,7 +6,7 @@
 void print_hello()
 {
     printf(COLOR_BLUE"%s" COLOR_RESET "%s",
-           "\n\nMENU (select one item, enter a number):\n\n"
+           "\n\nMENU (select one item, enter a number):\n\n",
            "Operations with array:\n"
            "1  - Input elements of the stack.\n"
            "2  - Add an element to the stack.\n"

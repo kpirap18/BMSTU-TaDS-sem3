@@ -11,8 +11,8 @@
 func_var do_action(func_var code_act)
 {
     int capacity, max_capacity;
-    arr_r *fmem = NULL;
-    liststack_r *root = NULL;
+    //arr_r *fmem = NULL;
+    //liststack_r *root = NULL;
     arrstack_r *stack = NULL;
 
     switch (code_act)
@@ -98,7 +98,10 @@ func_var do_action(func_var code_act)
             break;
 
         case 4:
-            printf(" Output the current state of the stack.")
+            printf(" Output the current state of the stack.");
+
+            output_stack_arr(stack);
+            printf(COLOR_GREEN"DONE!!!\n"COLOR_RESET);
             break;
 
         case 5:

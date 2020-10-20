@@ -52,6 +52,7 @@ int input_stack_arr(const int count, arrstack_r *stack)
             return STACK_FULL_ERR;
     }
 
+    getchar();
     return OK;
 }
 
@@ -64,7 +65,7 @@ int output_stack_arr(arrstack_r *stack)
 
     while (s >= 0)
     {
-        printf("%d\n", stack->arr[s--]);
+        printf("%c\n", stack->arr[s--]);
     }
 
     return OK;
