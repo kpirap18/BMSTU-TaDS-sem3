@@ -31,6 +31,8 @@
 #define STACK_OUT_ERR        -11
 #define STACK_FULL_ERR       -12
 
+#define OPEN "{[("
+#define CLOSE "}])"
 typedef int func_var;
 
 typedef struct liststack

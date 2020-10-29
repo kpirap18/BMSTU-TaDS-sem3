@@ -1,3 +1,14 @@
+/*! \defgroup <main> (The Main module)
+  @{
+  */
+/**
+  * \file io.c
+  * \brief File with the input/output code
+  * \version 1.0
+  * \date 23.10.2020
+  @}
+  */
+
 #include "io.h"
 
 /*!
@@ -11,15 +22,16 @@ void print_hello()
            "1  - Input elements of the stack.\n"
            "2  - Add an element to the stack.\n"
            "3  - Remove an element from the stack.\n"
-           "4  - Check the correct placement of parentheses.\n"
-           "5  - Output the current state of the stack.\n\n"
+           "4  - Output the current state of the stack.\n"
+           "5  - Check the correct placement of parentheses.\n\n"
            "Operations with list:\n"
            "6  - Input elements of the stack.\n"
            "7  - Add an element to the stack.\n"
            "8  - Remove an element from the stack.\n"
            "9  - Check the correct placement of parentheses.\n"
            "10 - Output the current state of the stack.\n"
-           "11 - Output an array of freed addresses.\n\n"
+           "11 - Output an array of freed addresses.\n"
+           "12 - Statistics of the operation of various functions.\n\n"
 
            "0  - Program exit.\n"
            );
@@ -30,7 +42,7 @@ void print_hello()
  */
 void printf_input()
 {
-    printf(COLOR_BLUE"%s"COLOR_RESET"%s","\n\nFor help input 17", "\nINPUT YOUR CHOICE: ");
+    printf(COLOR_BLUE"%s"COLOR_RESET"%s","\n\nFor help input 13", "\nINPUT YOUR CHOICE: ");
 }
 
 /*!
@@ -63,7 +75,7 @@ func_var check_number(func_var *const number, const func_var l, const func_var r
 
     if (*number < l || *number > r)
     {
-        clean_my();
+        //clean_my();
         return INV_NUM_CHOICE;
     }
 

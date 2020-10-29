@@ -1,0 +1,12 @@
+import matplotlib.pyplot as plt
+plt.xlabel("COUNT IN ARRAY")
+plt.ylabel("TIME")
+plt.grid(True)
+plt.title("TIME(COUNT)")
+y1 = (4197, 10305, 27811, 48765)
+y2 = (1389, 3435, 9315, 16235)
+x = (10, 100, 500, 1000)
+plt.plot(x, y1, '-',label ="check-list")
+plt.plot(x, y2,'--', label="check-array")
+plt.legend()
+plt.show()
