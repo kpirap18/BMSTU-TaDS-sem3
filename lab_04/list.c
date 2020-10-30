@@ -200,7 +200,9 @@ int check_brackets_list(liststack_r *stack)
         flag = 0;
         if (s1[i] == ')')
         {
-            for (func_var j = k - 1; j > 0; j--)
+            if (k == 0)
+                return FALSE;
+            for (func_var j = k - 1; j >= 0; j--)
             {
                 if (one[j] == 1 && flag == 0)
                 {
@@ -220,7 +222,9 @@ int check_brackets_list(liststack_r *stack)
         flag = 0;
         if (s1[i] == '}')
         {
-            for (func_var j = k - 1; j > 0; j--)
+            if (k == 0)
+                return FALSE;
+            for (func_var j = k - 1; j >= 0; j--)
             {
                 if (one[j] == 2 && flag == 0)
                 {
@@ -240,7 +244,9 @@ int check_brackets_list(liststack_r *stack)
         flag = 0;
         if (s1[i] == ']')
         {
-            for (func_var j = k - 1; j > 0; j--)
+            if (k == 0)
+                return FALSE;
+            for (func_var j = k - 1; j >= 0; j--)
             {
                 if (one[j] == 3 && flag == 0)
                 {

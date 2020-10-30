@@ -162,8 +162,8 @@ int main()
                     break;
 
                 case 5:
-                    printf(COLOR_RED
-                           "Check the correct placement of parentheses."
+                    printf(COLOR_GREEN
+                           "Check the correct placement of parentheses. \n"
                            COLOR_RESET);
                     if (stack == NULL)
                     {
@@ -175,13 +175,13 @@ int main()
 
                     if (rc == FALSE)
                     {
-                        printf(COLOR_GREEN"FALSE\n"COLOR_RESET
-                               "The brackets are placed incorrectly");
+                        printf(COLOR_RED"FALSE\n"COLOR_RESET
+                               "The brackets are placed incorrectly.\n");
                     }
                     else
                     {
                         printf(COLOR_GREEN"TRUE\n"COLOR_RESET
-                               "The brackets are placed correctly");
+                               "The brackets are placed correctly.\n");
                     }
                     break;
 
@@ -291,26 +291,26 @@ int main()
 
 
                 case 9:
-                    printf(COLOR_RED
+                    printf(COLOR_GREEN
                            "Check the correct placement of parentheses."
                            COLOR_RESET);
                     if (stack_list == NULL)
                     {
                         printf(COLOR_RED"ERROR!!!"COLOR_RESET
-                               "Stack does not exist");
+                               "Stack does not exist.\n");
                         break;
                     }
                     int rc1 = check_brackets_list(stack_list);
 
                     if (rc1 == FALSE)
                     {
-                        printf(COLOR_GREEN"FALSE\n"COLOR_RESET
-                               "The brackets are placed incorrectly");
+                        printf(COLOR_RED"FALSE\n"COLOR_RESET
+                               "The brackets are placed incorrectly.\n");
                     }
                     else
                     {
                         printf(COLOR_GREEN"TRUE\n"COLOR_RESET
-                               "The brackets are placed correctly");
+                               "The brackets are placed correctly.\n");
                     }
                     break;
 

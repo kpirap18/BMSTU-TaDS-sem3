@@ -204,7 +204,9 @@ int check_brackets_arr(arrstack_r *arr)
         flag = 0;
         if (arr->arr[i] == ')')
         {
-            for (func_var j = k - 1; j > 0; j--)
+            if (k == 0)
+                return FALSE;
+            for (func_var j = k - 1; j >= 0; j--)
             {
                 if (one[j] == 1 && flag == 0)
                 {
@@ -224,7 +226,9 @@ int check_brackets_arr(arrstack_r *arr)
         flag = 0;
         if (arr->arr[i] == '}')
         {
-            for (func_var j = k - 1; j > 0; j--)
+            if (k == 0)
+                return FALSE;
+            for (func_var j = k - 1; j >= 0; j--)
             {
                 if (one[j] == 2 && flag == 0)
                 {
@@ -244,12 +248,14 @@ int check_brackets_arr(arrstack_r *arr)
         flag = 0;
         if (arr->arr[i] == ']')
         {
-            for (func_var j = k - 1; j > 0; j--)
+            if (k == 0)
+                return FALSE;
+            for (func_var j = k - 1; j >= 0; j--)
             {
                 if (one[j] == 3 && flag == 0)
                 {
                     flag = 1;
-                    for (int l = j; l < k - 1; l++)
+                    for (int l = j; l <= k - 1; l++)
                         one[l] = one[l + 1];
                     k--;
                     break;

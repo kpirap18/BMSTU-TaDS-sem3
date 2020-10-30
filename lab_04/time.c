@@ -32,7 +32,7 @@ int64_t tick(void)
  */
 void time_output(arrstack_r *arr, liststack_r *list, func_var max_)
 {
-    FILE *f = fopen("C:/msys64/home/Ira/tads/lab_04/in.txt", "r");
+    FILE *f = fopen("in.txt", "r");
     int64_t s1, e1, s2, e2;
 
     arr = create_stack_arr(max_);
@@ -41,16 +41,16 @@ void time_output(arrstack_r *arr, liststack_r *list, func_var max_)
     s1 = tick();
     input_stack_arr(1, arr, 1, stdin);
     e1 = tick();
-
+    rewind(f);
     s2 = tick();
     input_stack_list(1, &list, max_, 1, stdin);
     e2 = tick();
 
     printf("   Command: PUSH\n");
     printf("   what |   memory |     time |\n");
-    printf("  array | %8d | %8d |\n",
+    printf("  array | %8ld | %8d |\n",
            (sizeof(int)) * arr->capacity + sizeof(char *), (int)(e1 - s1));
-    printf("   list | %8d | %8d |\n\n\n",
+    printf("   list | %8ld | %8d |\n\n\n",
            (sizeof(char) + sizeof(int) + sizeof(liststack_r *)) * arr->capacity, (int)(e2 - s2));
 
     s1 = tick();
@@ -64,9 +64,9 @@ void time_output(arrstack_r *arr, liststack_r *list, func_var max_)
 
     printf("   Command: POP\n");
     printf("   what |   memory |     time |\n");
-    printf("  array | %8d | %8d |\n",
+    printf("  array | %8ld | %8d |\n",
            (sizeof(int)) * arr->capacity + sizeof(char *), (int)(e1 - s1));
-    printf("   list | %8d | %8d |\n\n\n",
+    printf("   list | %8ld | %8d |\n\n\n",
            (sizeof(char) + sizeof(int) + sizeof(liststack_r *)) * arr->capacity, (int)(e2 - s2));
 
     s1 = tick();
@@ -79,9 +79,9 @@ void time_output(arrstack_r *arr, liststack_r *list, func_var max_)
 
     printf("   Command: CHECK\n");
     printf("   what |   memory |     time |\n");
-    printf("  array | %8d | %8d |\n",
+    printf("  array | %8ld | %8d |\n",
            (sizeof(int)) * arr->capacity + sizeof(char *), (int)(e1 - s1));
-    printf("   list | %8d | %8d |\n\n\n",
+    printf("   list | %8ld | %8d |\n\n\n",
            (sizeof(char) + sizeof(int) + sizeof(liststack_r *)) * arr->capacity, (int)(e1 - s1) * 3);
     fclose(f);
 }
