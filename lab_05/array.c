@@ -138,7 +138,7 @@ void sd_array(int n, int interval, times_r t1,
 
     int type_queue = 0;
 
-    while (reqout1 < n)
+    while (reqout1 < n + 1)
     {
         if ((queue1.p_in == queue1.p_out && *((char*)queue1.p_in) != '\0') ||
             (queue2.p_in == queue2.p_out && *((char*)queue2.p_in) != '\0'))

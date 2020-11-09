@@ -27,7 +27,8 @@ void print_hello()
            "\n\nМЕНЮ (выбрать один пункт меню):\n\n",
            "1 - Моделирование и характеристика для очереди в виде массива.\n"
            "2 - Моделирование и характеристика для очереди в виде массива.\n"
-           "3 - Изменить время обработки завки.\n\n"
+           "3 - Изменить время обработки завки.\n"
+           "4 - Вывод сравнения времени при выполнении операций.\n\n"
 
            "0 - Выход из программы.\n\n"
            );
@@ -38,7 +39,7 @@ void print_hello()
  */
 void printf_input()
 {
-    printf(COLOR_BLUE"%s"COLOR_RESET"%s","\n\nДля помощи нажмите 4", "\nВАШ ВЫБОР: ");
+    printf(COLOR_BLUE"%s"COLOR_RESET"%s","\n\nДля помощи нажмите 5", "\nВАШ ВЫБОР: ");
 }
 
 /*!
@@ -50,6 +51,32 @@ void clean_my()
     while ((ch = getchar()) != '\n' && ch != EOF)
     {
     }
+}
+
+/*!
+ * \brief check_number - Entering a command and checking it.
+ * \param *const number - Pointer to the number.
+ * \param l, r - The left and right boundaries of the input.
+ * \return OK if all is well, otherwise some ERROR_.
+ */
+int check_float(double *const number)
+{
+    char num[3];
+    char *n;
+    fflush(stdin);
+    n = fgets(num, 4, stdin);
+    if (n == NULL || num[0] == '\n')
+        return DONT_INT_NUM_CHOICE;
+    num[strlen(num) - 1] = '\0';
+    *number = (double)atof(num);
+
+    if (fabs(*number - 0) < EPS)
+    {
+        //clean_my();
+        return INV_NUM_CHOICE;
+    }
+
+    return OK;
 }
 
 /*!

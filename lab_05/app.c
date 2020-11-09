@@ -1,10 +1,12 @@
 #include "app.h"
 #include "io.h"
 #include "array.h"
+#include "timemem.h"
 #include "list.h"
 
 int main()
 {
+    printf("%d", (int)(sizeof(int*)));
     setbuf(stdout, NULL);
     srand(time(NULL));
     int n = 1000;
@@ -21,8 +23,9 @@ int main()
     while (num_command != 0)
     {
         printf_input();
-        if (check_number(&num_command, 0, 4) != OK)
+        if (check_number(&num_command, 0, 5) != OK)
         {
+            fflush(stdin);
             printf(COLOR_RED"%s"COLOR_RESET"%s",
                    "ERROR!!!",
                    "Invalid command entered, please re-enter!!!\n");
@@ -45,9 +48,9 @@ int main()
                     printf(COLOR_GREEN
                            "Simulation and characterization for the queue as an array.\n"
                            COLOR_RESET);
-                    printf("Display info about memory? \n1 - yes, 2 - no\nSelection: ");
+                    printf("Display info about memory? \n1 - yes, 0 - no\nSelection: ");
                     int rc = scanf("%d", &flag);
-                    if (rc != 1)
+                    if (rc != 1 || !(flag == 1 || flag == 0))
                     {
                         printf(COLOR_RED"%s"COLOR_RESET"%s",
                                "ERROR!!!",
@@ -71,6 +74,7 @@ int main()
                     printf("What interval to change?\n");
                     if (check_number(&c, 1, 4) != OK)
                     {
+                        fflush(stdin);
                         printf(COLOR_RED"%s"COLOR_RESET"%s",
                                "ERROR!!!",
                                "Invalid number input!\nPlease choose some command\n");
@@ -79,7 +83,22 @@ int main()
                     else
                     {
                         printf("Input left and right borders: ");
-                        fscanf(stdin, "%lf %lf", &l, &r);
+                        int rc = check_float(&l);
+                        if (rc != 0)
+                        {
+                            printf(COLOR_RED"%s"COLOR_RESET"%s",
+                               "ERROR!!!",
+                               "Invalid number input!\nPlease choose some command\n");
+                            break;
+                        }
+                        rc += check_float(&r);
+                        if (rc != 0)
+                        {
+                            printf(COLOR_RED"%s"COLOR_RESET"%s",
+                               "ERROR!!!",
+                               "Invalid number input!\nPlease choose some command\n");
+                            break;
+                        }
                         if (c == 1)
                         {
                             t1.min = l;
@@ -106,7 +125,16 @@ int main()
                         printf("3: min = %lf; max = %lf\n", t3.min, t3.max);
                         printf("4: min = %lf; max = %lf\n", t4.min, t4.max);
                     }
-                    break;                    
+                    break;  
+                case 4:
+                    printf(COLOR_GREEN
+                           "Вывод сравнений по времени\n"
+                           COLOR_RESET);
+                    memory_io();
+                    break;    
+                case 5:
+                    print_hello();
+                    break;            
             }
         }
     }
