@@ -26,8 +26,8 @@ void print_hello()
     printf(COLOR_YELLOW"%s" COLOR_RESET "%s",
            "\n\nМЕНЮ (выбрать один пункт меню):\n\n",
            "1 - Моделирование и характеристика для очереди в виде массива.\n"
-           "2 - Моделирование и характеристика для очереди в виде массива.\n"
-           "3 - Изменить время обработки завки.\n"
+           "2 - Моделирование и характеристика для очереди в виде списка.\n"
+           "3 - Изменить время обработки заявки.\n"
            "4 - Вывод сравнения времени при выполнении операций.\n\n"
 
            "0 - Выход из программы.\n\n"
@@ -70,11 +70,11 @@ int check_float(double *const number)
     num[strlen(num) - 1] = '\0';
     *number = (double)atof(num);
 
-    if (fabs(*number - 0) < EPS)
-    {
-        //clean_my();
-        return INV_NUM_CHOICE;
-    }
+    // if (fabs(*number - 0) < EPS)
+    // {
+    //     //clean_my();
+    //     return INV_NUM_CHOICE;
+    // }
 
     return OK;
 }

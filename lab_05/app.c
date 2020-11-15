@@ -83,16 +83,16 @@ int main()
                     else
                     {
                         printf("Input left and right borders: ");
-                        int rc = check_float(&l);
-                        if (rc != 0)
+                        int rc = scanf("%lf", &l);
+                        if (rc != 1)
                         {
                             printf(COLOR_RED"%s"COLOR_RESET"%s",
                                "ERROR!!!",
                                "Invalid number input!\nPlease choose some command\n");
                             break;
                         }
-                        rc += check_float(&r);
-                        if (rc != 0)
+                        rc = scanf("%lf", &r);
+                        if (rc != 1)
                         {
                             printf(COLOR_RED"%s"COLOR_RESET"%s",
                                "ERROR!!!",

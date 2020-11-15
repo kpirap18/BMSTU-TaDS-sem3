@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <locale.h>
+//#include <locale.h>
 #include <string.h>
 
 #define COLOR_RED     "\x1b[31m"

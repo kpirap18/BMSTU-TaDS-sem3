@@ -141,7 +141,7 @@ char pop_list(liststack_r **stack_list, arr_r *arr)
     char p = t->data;
 
     arr->arr[++arr->ind] = (size_t)t;
-    free(t);
+//    free(t);
 
     return p;
 }

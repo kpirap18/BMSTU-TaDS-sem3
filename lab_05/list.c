@@ -364,7 +364,7 @@ void sd_list(int n, int interval, times_r t1,
     if (fabs(wait_in1 - 0) > EPS)
     {
         double per_in1 = fabs(100 * (reqin1 - wait_in1) / wait_in1);
-        printf("Погрешность ввода 1 очередь^ \t %lf%%\n", per_in1);
+        printf("Погрешность ввода 1 очередь: \t %lf%%\n", per_in1);
     }
     else
     {
@@ -374,7 +374,7 @@ void sd_list(int n, int interval, times_r t1,
     if (fabs(wait_in2 - 0) > EPS)
     {
         double per_in2 = fabs(100 * (reqin2 - wait_in2) / wait_in2);
-        printf("Погрешность ввода 2 очередь^ \t %lf%%\n", per_in2);
+        printf("Погрешность ввода 2 очередь: \t %lf%%\n", per_in2);
     }
     else
     {
@@ -383,7 +383,7 @@ void sd_list(int n, int interval, times_r t1,
     
     
 
-    printf("Время не работы ОА (в усл. ед. в.): \t %lf\n\n", timewithoutwork);
+    printf("Время не работы ОА (в усл. ед. в.): \t %lf\n\n", fabs(timewithoutwork));
 
     
 

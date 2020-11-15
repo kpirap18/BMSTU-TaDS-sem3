@@ -325,7 +325,7 @@ void sd_array(int n, int interval, times_r t1,
     
    
 
-    printf("Время не работы ОА (в усл. ед. в.): \t %lf\n\n", timewithoutwork);
+    printf("Время не работы ОА (в усл. ед. в.): \t %lf\n\n", fabs(timewithoutwork));
 
     
 

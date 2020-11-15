@@ -334,12 +334,12 @@ int main()
                            "Output an array of freed addresses.\n"
                            COLOR_RESET);
 
-                    if (stack_list == NULL)
+                    /*if (stack_list == NULL)
                     {
                         printf(COLOR_RED"ERROR!!!"COLOR_RESET
                                "Stack does not exist.\n");
                         break;
-                    }
+                    }*/
                     output_array(*arr);
                     printf(COLOR_GREEN"DONE!!!\n"COLOR_RESET);
                     break;
@@ -354,7 +354,7 @@ int main()
                                (stack_list == NULL) ? "no" : "yes");
                         break;
                     }*/
-                    time_output(stack, stack_list, 10);
+                    time_output(stack, stack_list, 100);
 
                     break;
                 case 13:
