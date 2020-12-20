@@ -1,0 +1,4 @@
+digraph MY_LAB_07 {
+0 -> 1 [label="6.0 km"];
+0 -> 2 [label="6.0 km"];
+}
