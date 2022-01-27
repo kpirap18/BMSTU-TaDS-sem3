@@ -1,6 +1,6 @@
-# Course: 1
+# Course: 2
 
-## Semester: 2
+## Semester: 3
 
 ### Subject: Types and data structures 
 
