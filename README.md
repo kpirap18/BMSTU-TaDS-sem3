@@ -1,1 +1,7 @@
-# Types_and_data_structures-semester-3
+# Course: 1
+
+# Semester: 2
+
+# Subject: Types and data structures 
+
+Done all labs
